@@ -1,0 +1,58 @@
+[
+  {
+    "id": "46b0665f-2d51-408c-ab71-73429006908f",
+    "items": [
+      {
+        "id": "3",
+        "name": "Backpack",
+        "price": 59.99,
+        "description": "Durable backpack with laptop compartment",
+        "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300",
+        "category": "accessories",
+        "stock": 45,
+        "quantity": 1
+      }
+    ],
+    "customer": {
+      "name": "Muhammad Junaid",
+      "email": "muhammadjunaid350305@gmail.com",
+      "address": "Abu Dhabi Mafraq Industrial Area, Near Discount Gifts Plus, Multan 60000"
+    },
+    "total": 59.99,
+    "status": "pending",
+    "createdAt": "2026-01-12T12:46:29.516Z"
+  },
+  {
+    "id": "3b3b68d9-9bce-42a5-b07f-a6767477b4cf",
+    "items": [
+      {
+        "id": "5",
+        "name": "Sunglasses",
+        "price": 45.99,
+        "description": "UV-protected polarized sunglasses",
+        "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300",
+        "category": "accessories",
+        "stock": 60,
+        "quantity": 1
+      },
+      {
+        "id": "3",
+        "name": "Backpack",
+        "price": 59.99,
+        "description": "Durable backpack with laptop compartment",
+        "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300",
+        "category": "accessories",
+        "stock": 45,
+        "quantity": 1
+      }
+    ],
+    "customer": {
+      "name": "Muhammad Junaid",
+      "email": "muhammadjunaid350305@gmail.com",
+      "address": "Abu Dhabi Mafraq Industrial Area, Near Discount Gifts Plus, Multan  60000"
+    },
+    "total": 105.98,
+    "status": "pending",
+    "createdAt": "2026-01-20T10:29:13.658Z"
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "1",
+    "name": "Wireless Headphones",
+    "price": 79.99,
+    "description": "Premium wireless headphones with noise cancellation",
+    "image": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300",
+    "category": "electronics",
+    "stock": 50
+  },
+  {
+    "id": "2",
+    "name": "Running Shoes",
+    "price": 129.99,
+    "description": "Lightweight running shoes for maximum comfort",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300",
+    "category": "footwear",
+    "stock": 30
+  },
+  {
+    "id": "3",
+    "name": "Backpack",
+    "price": 59.99,
+    "description": "Durable backpack with laptop compartment",
+    "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300",
+    "category": "accessories",
+    "stock": 45
+  },
+  {
+    "id": "4",
+    "name": "Smart Watch",
+    "price": 199.99,
+    "description": "Feature-rich smartwatch with health tracking",
+    "image": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300",
+    "category": "electronics",
+    "stock": 25
+  },
+  {
+    "id": "5",
+    "name": "Sunglasses",
+    "price": 45.99,
+    "description": "UV-protected polarized sunglasses",
+    "image": "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300",
+    "category": "accessories",
+    "stock": 60
+  },
+  {
+    "id": "6",
+    "name": "Leather Wallet",
+    "price": 34.99,
+    "description": "Genuine leather bifold wallet",
+    "image": "https://images.unsplash.com/photo-1627123424574-724758594e93?w=300",
+    "category": "accessories",
+    "stock": 40
+  }
+]
