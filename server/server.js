@@ -1,122 +1,124 @@
 import express from 'express';
 import cors from 'cors';
-import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = 3001;
-
 app.use(cors());
 app.use(express.json());
 
-// Helper functions for file operations
-const readJSON = async (filename) => {
-  const data = await fs.readFile(path.join(__dirname, 'data', filename), 'utf-8');
-  return JSON.parse(data);
-};
+const PORT = process.env.PORT || 3001;
+const DATA_DIR = path.resolve('data');
 
-const writeJSON = async (filename, data) => {
-  await fs.writeFile(path.join(__dirname, 'data', filename), JSON.stringify(data, null, 2));
-};
+const MOCK_ADMIN = { id: 'admin1', name: 'Admin User', email: 'admin@shopease.com' };
+const MOCK_TOKEN = 'mock-admin-token';
 
-// Products routes
+// helper: read JSON file
+async function readJSON(filename) {
+  try {
+    const p = path.join(DATA_DIR, filename);
+    const txt = await fs.readFile(p, 'utf8');
+    return JSON.parse(txt);
+  } catch (err) {
+    return null;
+  }
+}
+
+// helper: write JSON file
+async function writeJSON(filename, data) {
+  const p = path.join(DATA_DIR, filename);
+  await fs.writeFile(p, JSON.stringify(data, null, 2), 'utf8');
+}
+
+/* AUTH */
+// login
+app.post('/api/admin/login', async (req, res) => {
+  const { email, password } = req.body || {};
+  if (email === MOCK_ADMIN.email && password === 'admin123') {
+    return res.json({ token: MOCK_TOKEN, admin: MOCK_ADMIN });
+  }
+  return res.status(401).json({ message: 'Invalid credentials' });
+});
+
+// verify token
+app.get('/api/admin/verify', (req, res) => {
+  const auth = req.headers.authorization || '';
+  if (auth === `Bearer ${MOCK_TOKEN}`) return res.json({ admin: MOCK_ADMIN });
+  return res.status(401).json({ message: 'Invalid token' });
+});
+
+/* PRODUCTS (public & admin) */
+// public list
 app.get('/api/products', async (req, res) => {
-  try {
-    const products = await readJSON('products.json');
-    const { category, search } = req.query;
-    
-    let filtered = products;
-    if (category) {
-      filtered = filtered.filter(p => p.category === category);
-    }
-    if (search) {
-      filtered = filtered.filter(p => 
-        p.name.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-    res.json(filtered);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch products' });
-  }
+  const products = (await readJSON('products.json')) || [];
+  res.json(products);
 });
 
-app.get('/api/products/:id', async (req, res) => {
-  try {
-    const products = await readJSON('products.json');
-    const product = products.find(p => p.id === req.params.id);
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    res.json(product);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch product' });
-  }
+// admin list (same as public, but protected)
+app.get('/api/admin/products', (req, res) => {
+  const auth = req.headers.authorization || '';
+  if (auth !== `Bearer ${MOCK_TOKEN}`) return res.status(401).json({ message: 'Unauthorized' });
+  return readJSON('products.json').then((p) => res.json(p || []));
 });
 
-// Orders routes
+// create product
+app.post('/api/admin/products', async (req, res) => {
+  const auth = req.headers.authorization || '';
+  if (auth !== `Bearer ${MOCK_TOKEN}`) return res.status(401).json({ message: 'Unauthorized' });
+  const body = req.body || {};
+  const products = (await readJSON('products.json')) || [];
+  const id = `p${Date.now()}`;
+  const product = { id, ...body };
+  products.unshift(product);
+  await writeJSON('products.json', products);
+  res.status(201).json(product);
+});
+
+// update product
+app.put('/api/admin/products/:id', async (req, res) => {
+  const auth = req.headers.authorization || '';
+  if (auth !== `Bearer ${MOCK_TOKEN}`) return res.status(401).json({ message: 'Unauthorized' });
+  const { id } = req.params;
+  const body = req.body || {};
+  const products = (await readJSON('products.json')) || [];
+  const idx = products.findIndex((p) => String(p.id) === String(id));
+  if (idx === -1) return res.status(404).json({ message: 'Product not found' });
+  products[idx] = { ...products[idx], ...body };
+  await writeJSON('products.json', products);
+  res.json(products[idx]);
+});
+
+// delete product
+app.delete('/api/admin/products/:id', async (req, res) => {
+  const auth = req.headers.authorization || '';
+  if (auth !== `Bearer ${MOCK_TOKEN}`) return res.status(401).json({ message: 'Unauthorized' });
+  const { id } = req.params;
+  const products = (await readJSON('products.json')) || [];
+  const filtered = products.filter((p) => String(p.id) !== String(id));
+  await writeJSON('products.json', filtered);
+  res.json({ success: true });
+});
+
+/* ORDERS */
+// public (if needed)
 app.get('/api/orders', async (req, res) => {
-  try {
-    const orders = await readJSON('orders.json');
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch orders' });
-  }
+  const orders = (await readJSON('orders.json')) || [];
+  res.json(orders);
 });
 
-app.post('/api/orders', async (req, res) => {
-  try {
-    const { items, customer, total } = req.body;
-    
-    if (!items || !customer || !total) {
-      return res.status(400).json({ error: 'Missing required fields' });
-    }
-
-    const orders = await readJSON('orders.json');
-    const newOrder = {
-      id: uuidv4(),
-      items,
-      customer,
-      total,
-      status: 'pending',
-      createdAt: new Date().toISOString()
-    };
-    
-    orders.push(newOrder);
-    await writeJSON('orders.json', orders);
-    
-    res.status(201).json(newOrder);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create order' });
-  }
+// admin orders (protected)
+app.get('/api/admin/orders', async (req, res) => {
+  const auth = req.headers.authorization || '';
+  if (auth !== `Bearer ${MOCK_TOKEN}`) return res.status(401).json({ message: 'Unauthorized' });
+  const orders = (await readJSON('orders.json')) || [];
+  res.json(orders);
 });
 
-app.get('/api/orders/:id', async (req, res) => {
-  try {
-    const orders = await readJSON('orders.json');
-    const order = orders.find(o => o.id === req.params.id);
-    if (!order) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-    res.json(order);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch order' });
-  }
-});
-
-// Categories route
-app.get('/api/categories', async (req, res) => {
-  try {
-    const products = await readJSON('products.json');
-    const categories = [...new Set(products.map(p => p.category))];
-    res.json(categories);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch categories' });
-  }
+/* fallback */
+app.use((req, res) => {
+  res.status(404).send('Not found');
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Mock API listening on http://localhost:${PORT}`);
 });
