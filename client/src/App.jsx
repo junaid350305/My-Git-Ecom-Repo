@@ -18,6 +18,9 @@ import AdminLogin from './admin/pages/AdminLogin';
 import AdminDashboard from './admin/pages/AdminDashboard';
 import AdminProducts from './admin/pages/Products';
 import AdminOrders from './admin/pages/Orders';
+import Users from './admin/pages/Users';
+import Reports from './admin/pages/Reports';
+import Settings from './admin/pages/Settings';
 
 // Protected Route Component
 function ProtectedRoute({ children }) {
@@ -72,6 +75,30 @@ function AppContent({ darkMode, toggleTheme }) {
         element={
           <ProtectedRoute>
             <AdminOrders />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/reports"
+        element={
+          <ProtectedRoute>
+            <Reports />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
           </ProtectedRoute>
         }
       />

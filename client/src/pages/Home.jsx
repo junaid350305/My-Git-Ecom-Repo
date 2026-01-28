@@ -108,133 +108,132 @@ function Home() {
         </Box>
 
         {/* Features Section */}
-        <Grid container spacing={3} sx={{ mb: { xs: 4, md: 6 } }}>
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: 'repeat(4, 1fr)' },
+            gap: 3,
+            mb: { xs: 4, md: 6 },
+          }}
+        >
+          <Card
+            sx={{
+              p: 3,
+              textAlign: 'center',
+              backgroundColor: theme.palette.background.paper,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: theme.palette.mode === 'dark'
+                  ? '0 8px 24px rgba(255,107,122,0.3)'
+                  : '0 8px 24px rgba(233,69,96,0.15)',
+              },
+            }}
+          >
+            <LocalShipping
               sx={{
-                p: 3,
-                textAlign: 'center',
-                backgroundColor: theme.palette.background.paper,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: theme.palette.mode === 'dark'
-                    ? '0 8px 24px rgba(255,107,122,0.3)'
-                    : '0 8px 24px rgba(233,69,96,0.15)',
-                },
+                fontSize: 48,
+                color: theme.palette.primary.main,
+                mb: 1,
               }}
-            >
-              <LocalShipping
-                sx={{
-                  fontSize: 48,
-                  color: theme.palette.primary.main,
-                  mb: 1,
-                }}
-              />
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                Free Shipping
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                On orders over $100
-              </Typography>
-            </Card>
-          </Grid>
+            />
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              Free Shipping
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              On orders over $100
+            </Typography>
+          </Card>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
+          <Card
+            sx={{
+              p: 3,
+              textAlign: 'center',
+              backgroundColor: theme.palette.background.paper,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: theme.palette.mode === 'dark'
+                  ? '0 8px 24px rgba(255,107,122,0.3)'
+                  : '0 8px 24px rgba(233,69,96,0.15)',
+              },
+            }}
+          >
+            <VerifiedUser
               sx={{
-                p: 3,
-                textAlign: 'center',
-                backgroundColor: theme.palette.background.paper,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: theme.palette.mode === 'dark'
-                    ? '0 8px 24px rgba(255,107,122,0.3)'
-                    : '0 8px 24px rgba(233,69,96,0.15)',
-                },
+                fontSize: 48,
+                color: theme.palette.primary.main,
+                mb: 1,
               }}
-            >
-              <VerifiedUser
-                sx={{
-                  fontSize: 48,
-                  color: theme.palette.primary.main,
-                  mb: 1,
-                }}
-              />
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                Secure Payment
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                100% safe transactions
-              </Typography>
-            </Card>
-          </Grid>
+            />
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              Secure Payment
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              100% safe transactions
+            </Typography>
+          </Card>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
+          <Card
+            sx={{
+              p: 3,
+              textAlign: 'center',
+              backgroundColor: theme.palette.background.paper,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: theme.palette.mode === 'dark'
+                  ? '0 8px 24px rgba(255,107,122,0.3)'
+                  : '0 8px 24px rgba(233,69,96,0.15)',
+              },
+            }}
+          >
+            <Headset
               sx={{
-                p: 3,
-                textAlign: 'center',
-                backgroundColor: theme.palette.background.paper,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: theme.palette.mode === 'dark'
-                    ? '0 8px 24px rgba(255,107,122,0.3)'
-                    : '0 8px 24px rgba(233,69,96,0.15)',
-                },
+                fontSize: 48,
+                color: theme.palette.primary.main,
+                mb: 1,
               }}
-            >
-              <Headset
-                sx={{
-                  fontSize: 48,
-                  color: theme.palette.primary.main,
-                  mb: 1,
-                }}
-              />
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                24/7 Support
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                Always here to help
-              </Typography>
-            </Card>
-          </Grid>
+            />
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              24/7 Support
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Always here to help
+            </Typography>
+          </Card>
 
-          <Grid item xs={12} sm={6} md={3}>
-            <Card
+          <Card
+            sx={{
+              p: 3,
+              textAlign: 'center',
+              backgroundColor: theme.palette.background.paper,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-8px)',
+                boxShadow: theme.palette.mode === 'dark'
+                  ? '0 8px 24px rgba(255,107,122,0.3)'
+                  : '0 8px 24px rgba(233,69,96,0.15)',
+              },
+            }}
+          >
+            <Box
               sx={{
-                p: 3,
-                textAlign: 'center',
-                backgroundColor: theme.palette.background.paper,
-                transition: 'all 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-8px)',
-                  boxShadow: theme.palette.mode === 'dark'
-                    ? '0 8px 24px rgba(255,107,122,0.3)'
-                    : '0 8px 24px rgba(233,69,96,0.15)',
-                },
+                fontSize: 48,
+                mb: 1,
+                color: theme.palette.primary.main,
               }}
             >
-              <Box
-                sx={{
-                  fontSize: 48,
-                  mb: 1,
-                  color: theme.palette.primary.main,
-                }}
-              >
-                🎁
-              </Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-                Easy Returns
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                30-day return policy
-              </Typography>
-            </Card>
-          </Grid>
-        </Grid>
+              🎁
+            </Box>
+            <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              Easy Returns
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              30-day return policy
+            </Typography>
+          </Card>
+        </Box>
 
         {/* Featured Products Section */}
         <Box sx={{ mb: { xs: 4, md: 6 } }}>
@@ -282,13 +281,24 @@ function Home() {
               <CircularProgress color="primary" size={60} />
             </Box>
           ) : (
-            <Grid container spacing={3} sx={{ mt: 1 }}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  sm: 'repeat(2, 1fr)',
+                  md: 'repeat(3, 1fr)',
+                  lg: 'repeat(4, 1fr)',
+                },
+                gap: 3,
+              }}
+            >
               {featured.map((product) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+                <Box key={product.id}>
                   <ProductCard product={product} />
-                </Grid>
+                </Box>
               ))}
-            </Grid>
+            </Box>
           )}
         </Box>
 
@@ -307,34 +317,40 @@ function Home() {
             Shop by Category
           </Typography>
 
-          <Grid container spacing={2} sx={{ mt: 1 }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+              gap: 2,
+              mt: 2,
+            }}
+          >
             {['Electronics', 'Fashion', 'Home & Garden', 'Sports'].map((category) => (
-              <Grid item xs={12} sm={6} md={3} key={category}>
-                <Card
-                  component={RouterLink}
-                  to={`/products?category=${category.toLowerCase()}`}
-                  sx={{
-                    p: 3,
-                    textAlign: 'center',
-                    backgroundColor: theme.palette.background.paper,
-                    cursor: 'pointer',
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      backgroundColor: theme.palette.primary.main,
-                      color: 'white',
-                      transform: 'scale(1.05)',
-                    },
-                  }}
-                >
-                  <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    {category}
-                  </Typography>
-                </Card>
-              </Grid>
+              <Card
+                key={category}
+                component={RouterLink}
+                to={`/products?category=${category.toLowerCase()}`}
+                sx={{
+                  p: 3,
+                  textAlign: 'center',
+                  backgroundColor: theme.palette.background.paper,
+                  cursor: 'pointer',
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    backgroundColor: theme.palette.primary.main,
+                    color: 'white',
+                    transform: 'scale(1.05)',
+                  },
+                }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: 700 }}>
+                  {category}
+                </Typography>
+              </Card>
             ))}
-          </Grid>
+          </Box>
         </Box>
 
         {/* CTA Section */}
