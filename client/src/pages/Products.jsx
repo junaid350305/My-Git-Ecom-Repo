@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import {
   Container,
   Box,
-  Grid,
   TextField,
   FormControl,
   InputLabel,
@@ -12,7 +11,6 @@ import {
   Typography,
   Paper,
   CircularProgress,
-  Chip,
   Button,
   useTheme,
   useMediaQuery,
@@ -56,7 +54,7 @@ function Products() {
 
   // Filter products
   useEffect(() => {
-    let filtered = products;
+    let filtered = [...products];
 
     // Search filter
     if (searchTerm) {
@@ -101,6 +99,8 @@ function Products() {
         p: 3,
         backgroundColor: theme.palette.background.paper,
         borderRadius: 2,
+        position: 'sticky',
+        top: 80,
       }}
     >
       <Box
@@ -115,10 +115,7 @@ function Products() {
           Filters
         </Typography>
         {isMobile && (
-          <IconButton
-            size="small"
-            onClick={() => setMobileDrawerOpen(false)}
-          >
+          <IconButton size="small" onClick={() => setMobileDrawerOpen(false)}>
             <Close />
           </IconButton>
         )}
@@ -220,16 +217,22 @@ function Products() {
             <CircularProgress color="primary" size={60} />
           </Box>
         ) : (
-          <Grid container spacing={3}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: '280px 1fr' },
+              gap: 3,
+            }}
+          >
             {/* Sidebar - Desktop */}
             {!isMobile && (
-              <Grid item xs={12} md={3}>
+              <Box>
                 <FilterPanel />
-              </Grid>
+              </Box>
             )}
 
-            {/* Products Grid */}
-            <Grid item xs={12} md={isMobile ? 12 : 9}>
+            {/* Products Section */}
+            <Box>
               {/* Mobile Filter Button */}
               {isMobile && (
                 <Box sx={{ mb: 3 }}>
@@ -256,15 +259,25 @@ function Products() {
                 </Box>
               </Drawer>
 
-              {/* Products */}
+              {/* Products Grid */}
               {filteredProducts.length > 0 ? (
-                <Grid container spacing={2}>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: {
+                      xs: '1fr',
+                      sm: 'repeat(2, 1fr)',
+                      lg: 'repeat(3, 1fr)',
+                    },
+                    gap: 3,
+                  }}
+                >
                   {filteredProducts.map((product) => (
-                    <Grid item xs={12} sm={6} md={6} lg={4} key={product.id}>
+                    <Box key={product.id}>
                       <ProductCard product={product} />
-                    </Grid>
+                    </Box>
                   ))}
-                </Grid>
+                </Box>
               ) : (
                 <Paper
                   sx={{
@@ -286,8 +299,8 @@ function Products() {
                   </Button>
                 </Paper>
               )}
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         )}
       </Container>
     </Box>

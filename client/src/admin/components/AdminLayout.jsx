@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import {
   Box,
   AppBar,
@@ -71,22 +71,32 @@ function AdminLayout({ children }) {
 
   const drawerContent = (
     <Box sx={{ pt: 2 }}>
-      {/* Header */}
-      <Typography
-        variant="h6"
-        sx={{
-          px: 2,
-          mb: 3,
-          fontWeight: 700,
-          color: theme.palette.primary.main,
+      {/* Header - Clickable Logo */}
+      <Link
+        to="/"
+        style={{
+          textDecoration: 'none',
           display: 'flex',
           alignItems: 'center',
-          gap: 1,
+          gap: 8,
+          padding: '0 16px',
+          marginBottom: 24,
         }}
       >
-        <ShoppingCart sx={{ fontSize: 28 }} />
-        ShopEase
-      </Typography>
+        <ShoppingCart sx={{ fontSize: 28, color: theme.palette.primary.main }} />
+        <Typography
+          variant="h6"
+          sx={{
+            fontWeight: 700,
+            color: theme.palette.primary.main,
+            '&:hover': {
+              opacity: 0.8,
+            },
+          }}
+        >
+          ShopEase
+        </Typography>
+      </Link>
 
       {/* Menu Items */}
       <List>

@@ -23,11 +23,13 @@ function ProductCard({ product }) {
 
   const handleAddToCart = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     addToCart(product);
   };
 
   const handleToggleFavorite = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsFavorite(!isFavorite);
   };
 
@@ -58,15 +60,13 @@ function ProductCard({ product }) {
       <Box sx={{ position: 'relative', overflow: 'hidden' }}>
         <CardMedia
           component="img"
-          height="240"
-          image={product.image}
+          height="220"
+          image={product.image || '/images/placeholder.jpg'}
           alt={product.name}
           sx={{
             objectFit: 'cover',
             transition: 'transform 0.3s ease',
-            '&:hover': {
-              transform: 'scale(1.05)',
-            },
+            backgroundColor: theme.palette.grey[100],
           }}
         />
 
@@ -80,6 +80,7 @@ function ProductCard({ product }) {
             top: 8,
             right: 8,
             fontWeight: 600,
+            fontSize: '0.7rem',
           }}
         />
 
@@ -91,49 +92,51 @@ function ProductCard({ product }) {
             top: 8,
             left: 8,
             minWidth: 'auto',
-            padding: '8px',
+            padding: '6px',
             backgroundColor: 'rgba(255,255,255,0.9)',
+            borderRadius: '50%',
             '&:hover': {
               backgroundColor: 'white',
             },
           }}
         >
           {isFavorite ? (
-            <Favorite sx={{ color: theme.palette.error.main }} />
+            <Favorite sx={{ color: theme.palette.error.main, fontSize: 20 }} />
           ) : (
-            <FavoriteBorder sx={{ color: theme.palette.text.secondary }} />
+            <FavoriteBorder sx={{ color: theme.palette.text.secondary, fontSize: 20 }} />
           )}
         </Button>
       </Box>
 
       {/* Content */}
-      <CardContent sx={{ flexGrow: 1, pb: 1 }}>
+      <CardContent sx={{ flexGrow: 1, p: 2 }}>
         <Typography
-          variant="body2"
+          variant="caption"
           color="textSecondary"
-          sx={{ mb: 0.5, fontSize: '0.75rem', textTransform: 'uppercase' }}
+          sx={{ mb: 0.5, display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 }}
         >
-          {product.category}
+          {product.category || 'General'}
         </Typography>
         <Typography
           variant="subtitle1"
           sx={{
             fontWeight: 600,
-            minHeight: '2.5rem',
+            minHeight: '2.8rem',
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
             mb: 1,
+            lineHeight: 1.4,
           }}
         >
           {product.name}
         </Typography>
 
         {/* Rating */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 1 }}>
           <Rating value={4} readOnly size="small" />
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="caption" color="textSecondary">
             (48)
           </Typography>
         </Box>
@@ -147,24 +150,24 @@ function ProductCard({ product }) {
               color: theme.palette.primary.main,
             }}
           >
-            ${product.price.toFixed(2)}
+            ${Number(product.price).toFixed(2)}
           </Typography>
           {product.originalPrice && (
             <Typography
               variant="body2"
               sx={{
                 textDecoration: 'line-through',
-                color: 'textSecondary',
+                color: 'text.secondary',
               }}
             >
-              ${product.originalPrice.toFixed(2)}
+              ${Number(product.originalPrice).toFixed(2)}
             </Typography>
           )}
         </Box>
       </CardContent>
 
       {/* Actions */}
-      <CardActions sx={{ pt: 0 }}>
+      <CardActions sx={{ p: 2, pt: 0 }}>
         <Button
           fullWidth
           variant="contained"
@@ -176,6 +179,7 @@ function ProductCard({ product }) {
           sx={{
             fontWeight: 600,
             textTransform: 'none',
+            py: 1,
           }}
         >
           Add to Cart
