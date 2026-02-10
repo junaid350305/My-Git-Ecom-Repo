@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "customer": "John Doe",
+    "email": "john@example.com",
+    "items": [{ "id": 1, "name": "Test Product 1", "price": 29.99, "quantity": 2 }],
+    "total": 59.98,
+    "status": "pending",
+    "createdAt": "2024-06-01T10:00:00Z"
+  },
+  {
+    "id": 2,
+    "customer": "Jane Smith",
+    "email": "jane@example.com",
+    "items": [{ "id": 2, "name": "Test Product 2", "price": 49.99, "quantity": 1 }],
+    "total": 49.99,
+    "status": "delivered",
+    "createdAt": "2024-06-05T14:30:00Z"
+  }
+]
