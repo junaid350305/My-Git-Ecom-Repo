@@ -5,11 +5,20 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --detectOpenHandles"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --detectOpenHandles",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --detectOpenHandles --coverage"
   },
   "jest": {
     "testEnvironment": "node",
-    "transform": {}
+    "transform": {},
+    "collectCoverageFrom": [
+      "app.js",
+      "!server.js",
+      "!node_modules/**",
+      "!__tests__/**",
+      "!data/**"
+    ],
+    "coverageReporters": ["text", "text-summary", "lcov", "html"]
   },
   "dependencies": {
     "cors": "^2.8.5",

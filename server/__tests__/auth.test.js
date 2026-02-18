@@ -41,6 +41,16 @@ describe('Authentication Endpoints', () => {
 
       expect(res.statusCode).toBe(401);
     });
+
+    // NEW — covers req.body being undefined (no body sent at all)
+    test('should reject when no body is sent', async () => {
+      const res = await request(app)
+        .post('/api/admin/login')
+        .set('Content-Type', 'application/json');
+
+      expect(res.statusCode).toBe(401);
+      expect(res.body.message).toBe('Invalid credentials');
+    });
   });
 
   // ─── GET /api/admin/verify ───
@@ -65,6 +75,22 @@ describe('Authentication Endpoints', () => {
         .set('Authorization', 'Bearer invalid-token');
 
       expect(res.statusCode).toBe(401);
+    });
+  });
+
+  // NEW — covers the 404 fallback route (line 241)
+  describe('404 Fallback', () => {
+    test('should return 404 for unknown routes', async () => {
+      const res = await request(app).get('/api/nonexistent/route');
+      expect(res.statusCode).toBe(404);
+      expect(res.text).toBe('Not found');
+    });
+
+    test('should return 404 for unknown POST routes', async () => {
+      const res = await request(app)
+        .post('/api/unknown')
+        .send({ data: 'test' });
+      expect(res.statusCode).toBe(404);
     });
   });
 });

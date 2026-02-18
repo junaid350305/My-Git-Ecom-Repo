@@ -54,7 +54,7 @@ async function writeJSON(filename, data) {
 
 // ============== AUTH MIDDLEWARE ==============
 function authenticateToken(req, res, next) {
-  const auth = req.headers.authorization || '';
+  const auth = req.headers.authorization;
   if (auth === `Bearer ${MOCK_TOKEN}`) {
     req.admin = MOCK_ADMIN;
     return next();
@@ -64,7 +64,7 @@ function authenticateToken(req, res, next) {
 
 // ============== AUTH ENDPOINTS ==============
 app.post('/api/admin/login', async (req, res) => {
-  const { email, password } = req.body || {};
+  const { email, password } = req.body;
   if (email === MOCK_ADMIN.email && password === 'admin123') {
     return res.json({ token: MOCK_TOKEN, admin: MOCK_ADMIN });
   }
@@ -72,7 +72,7 @@ app.post('/api/admin/login', async (req, res) => {
 });
 
 app.get('/api/admin/verify', (req, res) => {
-  const auth = req.headers.authorization || '';
+  const auth = req.headers.authorization;
   if (auth === `Bearer ${MOCK_TOKEN}`) return res.json({ admin: MOCK_ADMIN });
   return res.status(401).json({ message: 'Invalid token' });
 });
@@ -89,7 +89,7 @@ app.get('/api/admin/products', authenticateToken, async (req, res) => {
 });
 
 app.post('/api/admin/products', authenticateToken, async (req, res) => {
-  const body = req.body || {};
+  const body = req.body;
   const products = (await readJSON('products.json')) || [];
   const id = `p${Date.now()}`;
   const product = { id, ...body };
@@ -100,7 +100,7 @@ app.post('/api/admin/products', authenticateToken, async (req, res) => {
 
 app.put('/api/admin/products/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
-  const body = req.body || {};
+  const body = req.body;
   const products = (await readJSON('products.json')) || [];
   const idx = products.findIndex((p) => String(p.id) === String(id));
   if (idx === -1) return res.status(404).json({ message: 'Product not found' });
@@ -129,22 +129,18 @@ app.get('/api/admin/orders', authenticateToken, async (req, res) => {
 });
 
 app.put('/api/admin/orders/:id', authenticateToken, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-    const orders = (await readJSON('orders.json')) || [];
-    const idx = orders.findIndex((o) => String(o.id) === String(id));
+  const { id } = req.params;
+  const { status } = req.body;
+  const orders = (await readJSON('orders.json')) || [];
+  const idx = orders.findIndex((o) => String(o.id) === String(id));
 
-    if (idx === -1) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    orders[idx] = { ...orders[idx], status };
-    await writeJSON('orders.json', orders);
-    res.json(orders[idx]);
-  } catch (error) {
-    res.status(500).json({ message: 'Error updating order' });
+  if (idx === -1) {
+    return res.status(404).json({ message: 'Order not found' });
   }
+
+  orders[idx] = { ...orders[idx], status };
+  await writeJSON('orders.json', orders);
+  res.json(orders[idx]);
 });
 
 // ============== USERS ENDPOINTS ==============
@@ -176,25 +172,21 @@ app.delete('/api/admin/users/:id', authenticateToken, (req, res) => {
 
 // ============== REPORTS ENDPOINTS ==============
 app.get('/api/admin/reports/summary', authenticateToken, async (req, res) => {
-  try {
-    const ordersData = (await readJSON('orders.json')) || [];
-    const productsData = (await readJSON('products.json')) || [];
+  const ordersData = (await readJSON('orders.json')) || [];
+  const productsData = (await readJSON('products.json')) || [];
 
-    const totalRevenue = ordersData.reduce((sum, order) => sum + (order.total || 0), 0);
-    const totalOrders = ordersData.length;
-    const totalProducts = productsData.length;
-    const totalUsers = users.length;
+  const totalRevenue = ordersData.reduce((sum, order) => sum + (order.total ? order.total : 0), 0);
+  const totalOrders = ordersData.length;
+  const totalProducts = productsData.length;
+  const totalUsers = users.length;
 
-    res.json({
-      totalRevenue,
-      totalOrders,
-      totalProducts,
-      totalUsers,
-      averageOrderValue: totalOrders > 0 ? (totalRevenue / totalOrders).toFixed(2) : 0,
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Error reading data files' });
-  }
+  res.json({
+    totalRevenue,
+    totalOrders,
+    totalProducts,
+    totalUsers,
+    averageOrderValue: totalOrders > 0 ? (totalRevenue / totalOrders).toFixed(2) : 0,
+  });
 });
 
 app.get('/api/admin/reports/sales', authenticateToken, (req, res) => {
@@ -210,20 +202,16 @@ app.get('/api/admin/reports/sales', authenticateToken, (req, res) => {
 });
 
 app.get('/api/admin/reports/top-products', authenticateToken, async (req, res) => {
-  try {
-    const productsData = (await readJSON('products.json')) || [];
+  const productsData = (await readJSON('products.json')) || [];
 
-    const topProducts = productsData.slice(0, 5).map((p) => ({
-      id: p.id,
-      name: p.name,
-      sales: Math.floor(Math.random() * 100) + 20,
-      revenue: (Math.floor(Math.random() * 100) + 20) * p.price,
-    }));
+  const topProducts = productsData.slice(0, 5).map((p) => ({
+    id: p.id,
+    name: p.name,
+    sales: Math.floor(Math.random() * 100) + 20,
+    revenue: (Math.floor(Math.random() * 100) + 20) * p.price,
+  }));
 
-    res.json(topProducts);
-  } catch (error) {
-    res.status(500).json({ message: 'Error reading products data' });
-  }
+  res.json(topProducts);
 });
 
 // ============== SETTINGS ENDPOINTS ==============

@@ -34,6 +34,20 @@ describe('Product Endpoints', () => {
         expect(product).toHaveProperty('price');
       }
     });
+
+    test('should return empty array when products.json is missing', async () => {
+      const filePath = path.join(DATA_DIR, 'products.json');
+      const backup = await fs.readFile(filePath, 'utf-8');
+      await fs.rename(filePath, filePath + '.bak');
+
+      try {
+        const res = await request(app).get('/api/products');
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toEqual([]);
+      } finally {
+        await fs.rename(filePath + '.bak', filePath);
+      }
+    });
   });
 
   describe('GET /api/admin/products', () => {
@@ -49,6 +63,21 @@ describe('Product Endpoints', () => {
     test('should reject without token', async () => {
       const res = await request(app).get('/api/admin/products');
       expect(res.statusCode).toBe(401);
+    });
+
+    test('should return empty array when products.json is missing (admin)', async () => {
+      const filePath = path.join(DATA_DIR, 'products.json');
+      await fs.rename(filePath, filePath + '.bak');
+
+      try {
+        const res = await request(app)
+          .get('/api/admin/products')
+          .set(AUTH_HEADER);
+        expect(res.statusCode).toBe(200);
+        expect(res.body).toEqual([]);
+      } finally {
+        await fs.rename(filePath + '.bak', filePath);
+      }
     });
   });
 
@@ -81,6 +110,44 @@ describe('Product Endpoints', () => {
 
       expect(res.statusCode).toBe(401);
     });
+
+    test('should create product even when products.json is missing', async () => {
+      const filePath = path.join(DATA_DIR, 'products.json');
+      const backup = await fs.readFile(filePath, 'utf-8');
+      await fs.rename(filePath, filePath + '.bak');
+
+      try {
+        const res = await request(app)
+          .post('/api/admin/products')
+          .set(AUTH_HEADER)
+          .send({ name: 'Recovery Product', price: 10 });
+
+        expect(res.statusCode).toBe(201);
+        expect(res.body.name).toBe('Recovery Product');
+      } finally {
+        await fs.writeFile(filePath, backup);
+      }
+    });
+
+    test('should create product with empty body', async () => {
+      const res = await request(app)
+        .post('/api/admin/products')
+        .set(AUTH_HEADER)
+        .send({});
+
+      expect(res.statusCode).toBe(201);
+      expect(res.body).toHaveProperty('id');
+    });
+
+    // NEW — covers req.body || {} when no content-type sent (line 103)
+    test('should create product when no body or content-type is sent', async () => {
+      const res = await request(app)
+        .post('/api/admin/products')
+        .set(AUTH_HEADER);
+
+      expect(res.statusCode).toBe(201);
+      expect(res.body).toHaveProperty('id');
+    });
   });
 
   describe('PUT /api/admin/products/:id', () => {
@@ -106,6 +173,23 @@ describe('Product Endpoints', () => {
 
       expect(res.statusCode).toBe(404);
     });
+
+    test('should return 404 when products.json is missing', async () => {
+      const filePath = path.join(DATA_DIR, 'products.json');
+      const backup = await fs.readFile(filePath, 'utf-8');
+      await fs.rename(filePath, filePath + '.bak');
+
+      try {
+        const res = await request(app)
+          .put('/api/admin/products/p1')
+          .set(AUTH_HEADER)
+          .send({ name: 'Ghost' });
+
+        expect(res.statusCode).toBe(404);
+      } finally {
+        await fs.writeFile(filePath, backup);
+      }
+    });
   });
 
   describe('DELETE /api/admin/products/:id', () => {
@@ -126,9 +210,25 @@ describe('Product Endpoints', () => {
         .delete('/api/admin/products/nonexistent999')
         .set(AUTH_HEADER);
 
-      // Your delete uses filter, so it always returns success
       expect(res.statusCode).toBe(200);
       expect(res.body.success).toBe(true);
+    });
+
+    test('should succeed when products.json is missing', async () => {
+      const filePath = path.join(DATA_DIR, 'products.json');
+      const backup = await fs.readFile(filePath, 'utf-8');
+      await fs.rename(filePath, filePath + '.bak');
+
+      try {
+        const res = await request(app)
+          .delete('/api/admin/products/p1')
+          .set(AUTH_HEADER);
+
+        expect(res.statusCode).toBe(200);
+        expect(res.body.success).toBe(true);
+      } finally {
+        await fs.writeFile(filePath, backup);
+      }
     });
   });
 });

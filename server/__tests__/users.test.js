@@ -59,6 +59,17 @@ describe('User Endpoints', () => {
       expect(res.statusCode).toBe(200);
       expect(res.body.name).toBe('John Updated');
     });
+
+    // NEW — covers the 404 branch for user update
+    test('should return 404 for non-existent user', async () => {
+      const res = await request(app)
+        .put('/api/admin/users/user999')
+        .set(AUTH_HEADER)
+        .send({ name: 'Ghost User' });
+
+      expect(res.statusCode).toBe(404);
+      expect(res.body.message).toBe('User not found');
+    });
   });
 
   describe('DELETE /api/admin/users/:id', () => {

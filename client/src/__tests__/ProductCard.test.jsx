@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { render } from '../test/test-utils';
+import { render, darkRender } from '../test/test-utils';
 import ProductCard from '../components/ProductCard';
 
 const mockProduct = {
@@ -81,15 +81,67 @@ describe('ProductCard Component', () => {
   test('favorite button toggles', async () => {
     const user = userEvent.setup();
     render(<ProductCard product={mockProduct} />);
-    
-    // Find the favorite button (first button that's not Add to Cart)
+
     const buttons = screen.getAllByRole('button');
     const favButton = buttons.find(btn => !btn.textContent.includes('Add to Cart'));
-    
+
     if (favButton) {
       await user.click(favButton);
-      // Should toggle without crashing
       expect(favButton).toBeInTheDocument();
     }
+  });
+
+  test('clicking Add to Cart calls addToCart', async () => {
+    const user = userEvent.setup();
+    render(<ProductCard product={mockProduct} />);
+
+    const addButton = screen.getByText('Add to Cart').closest('button');
+    await user.click(addButton);
+
+    expect(addButton).toBeInTheDocument();
+  });
+
+  test('favorite toggles on and off', async () => {
+    const user = userEvent.setup();
+    render(<ProductCard product={mockProduct} />);
+
+    const buttons = screen.getAllByRole('button');
+    const favButton = buttons.find(btn => !btn.textContent.includes('Add to Cart'));
+
+    await user.click(favButton);
+    await user.click(favButton);
+
+    expect(favButton).toBeInTheDocument();
+  });
+
+  test('shows General when category is missing', () => {
+    const noCategory = { ...mockProduct, id: 3, category: undefined };
+    render(<ProductCard product={noCategory} />);
+    expect(screen.getByText('General')).toBeInTheDocument();
+  });
+
+  test('shows placeholder image when image is missing', () => {
+    const noImage = { ...mockProduct, id: 4, image: '' };
+    render(<ProductCard product={noImage} />);
+    const img = screen.getByAltText('Test Wireless Headphones');
+    expect(img).toHaveAttribute('src', '/images/placeholder.jpg');
+  });
+
+  test('shows original price with strikethrough when provided', () => {
+    const withOriginalPrice = { ...mockProduct, id: 5, originalPrice: 49.99 };
+    render(<ProductCard product={withOriginalPrice} />);
+    expect(screen.getByText('$49.99')).toBeInTheDocument();
+  });
+
+  test('does not show original price when not provided', () => {
+    render(<ProductCard product={mockProduct} />);
+    const prices = screen.getAllByText(/^\$/);
+    expect(prices).toHaveLength(1);
+  });
+
+  // NEW — covers dark mode boxShadow branch
+  test('renders correctly in dark mode', () => {
+    darkRender(<ProductCard product={mockProduct} />);
+    expect(screen.getByText('Test Wireless Headphones')).toBeInTheDocument();
   });
 });

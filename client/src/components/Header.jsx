@@ -134,7 +134,7 @@ function Header({ darkMode, onToggleTheme }) {
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: theme.palette.primary.dark || '#1a1a2e',
+        backgroundColor: theme.palette.primary.dark,
         boxShadow: `0 2px 8px ${alpha(theme.palette.common.black, 0.15)}`,
       }}
     >

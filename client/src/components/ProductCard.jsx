@@ -35,6 +35,8 @@ function ProductCard({ product }) {
 
   const stockStatus = product.stock > 0 ? 'In Stock' : 'Out of Stock';
   const stockColor = product.stock > 0 ? 'success' : 'error';
+  const categoryLabel = product.category ? product.category : 'General';
+  const imageUrl = product.image ? product.image : '/images/placeholder.jpg';
 
   return (
     <Card
@@ -61,7 +63,7 @@ function ProductCard({ product }) {
         <CardMedia
           component="img"
           height="220"
-          image={product.image || '/images/placeholder.jpg'}
+          image={imageUrl}
           alt={product.name}
           sx={{
             objectFit: 'cover',
@@ -115,7 +117,7 @@ function ProductCard({ product }) {
           color="textSecondary"
           sx={{ mb: 0.5, display: 'block', textTransform: 'uppercase', letterSpacing: 0.5 }}
         >
-          {product.category || 'General'}
+          {categoryLabel}
         </Typography>
         <Typography
           variant="subtitle1"
