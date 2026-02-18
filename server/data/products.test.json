@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "Test Product 1",
+    "price": 29.99,
+    "category": "Electronics",
+    "stock": 50,
+    "image": "/images/test1.jpg",
+    "description": "Test product description 1",
+    "rating": 4.5
+  },
+  {
+    "id": 2,
+    "name": "Test Product 2",
+    "price": 49.99,
+    "category": "Clothing",
+    "stock": 0,
+    "image": "/images/test2.jpg",
+    "description": "Test product description 2",
+    "rating": 3.8
+  }
+]
